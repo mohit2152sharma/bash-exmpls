@@ -21,10 +21,7 @@ def create_content(files):
 def create_readme(cntnt):
     sting = "# Bash Examples\n"
     for h, t in cntnt:
-        sting += "<detials>\n"
-        sting += f"<summary>{h}</summary>\n"
-        sting += f"{t}\n"
-        sting += "</details>\n"
+        sting += f"\n\n<detials>\n\n<summary>{h}</summary>\n\n{t}\n\n</details>"
 
     with open("README.md", "w") as f:
         f.write(sting)

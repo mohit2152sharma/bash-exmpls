@@ -1,6 +1,10 @@
 # Bash Examples
+
+
 <detials>
+
 <summary>dollar (`$`) in bash</summary>
+
 # dollar (`$`) in bash
 
 1. `$` used to reference variables. Inside double quotes use `${variable_name}`, useful for when `$names` instead do `${name}s`.
@@ -123,9 +127,13 @@ world
 ❯ echo $-
 569JNRXZghiklms
 ```
+
 </details>
+
 <detials>
+
 <summary>dollar (`$`) in bash</summary>
+
 # dollar (`$`) in bash
 
 1. `$` used to reference variables. Inside double quotes use `${variable_name}`, useful for when `$names` instead do `${name}s`.
@@ -248,4 +256,5 @@ world
 ❯ echo $-
 569JNRXZghiklms
 ```
+
 </details>
