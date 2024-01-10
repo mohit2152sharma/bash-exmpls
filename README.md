@@ -1,7 +1,7 @@
 # Bash Examples
 
 
-<detials>
+<details>
 
 <summary>dollar (`$`) in bash</summary>
 
@@ -130,7 +130,7 @@ world
 
 </details>
 
-<detials>
+<details>
 
 <summary>dollar (`$`) in bash</summary>
 
