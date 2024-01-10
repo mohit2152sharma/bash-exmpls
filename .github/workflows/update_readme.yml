@@ -19,10 +19,10 @@ jobs:
       - name: Run script and update readme
         run: python create_readme.py
       - name: Commit and Push Changes
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add --all
           git commit -m "Updated readme on `date` with GitHub Actions" || true
-          git push origin master || true
+          git push origin main || true
