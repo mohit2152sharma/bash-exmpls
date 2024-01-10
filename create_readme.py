@@ -25,6 +25,7 @@ def create_readme(cntnt):
 
     with open("README.md", "w") as f:
         f.write(sting)
+    print("successfully written to README.md")
 
 
 if __name__ == "__main__":
