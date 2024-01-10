@@ -1,0 +1,29 @@
+name: Update Readme
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  update_readme:
+    name: Update Readme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+          cache: "pip"
+      - name: Run script and update readme
+        run: python create_readme.py
+      - name: Commit and Push Changes
+        if: github.ref == 'refs/heads/master'
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add --all
+          git commit -m "Updated readme on `date` with GitHub Actions" || true
+          git push origin master || true
