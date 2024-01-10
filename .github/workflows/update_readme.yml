@@ -2,7 +2,7 @@ name: Update Readme
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
-          cache: "pip"
       - name: Run script and update readme
         run: python create_readme.py
       - name: Commit and Push Changes
