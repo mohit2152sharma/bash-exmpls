@@ -29,5 +29,6 @@ def create_readme(cntnt):
 
 if __name__ == "__main__":
     files = get_md_files()
+    print(f"{files=}")
     cntnt = create_content(files)
     create_readme(cntnt)
