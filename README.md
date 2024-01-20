@@ -3,6 +3,104 @@
 
 <details>
 
+<summary>`case` syntax</summary>
+
+# `case` syntax
+
+```bash
+# file named case.sh
+#!/bin/bash
+
+# case <expression> in
+case $1 in
+# pattern)
+"one")
+	# if matches do something
+	echo "one"
+	;; # used to end the block
+"two")
+	# if this block matches do something
+	echo "two"
+	;;
+*)
+	# if nothing matches
+	echo "default"
+	;;
+esac # end of case block
+```
+
+```bash
+❯ bash case.sh one
+one
+
+❯ bash case.sh four
+default
+```
+
+</details>
+
+<details>
+
+<summary>`basename` vs `dirname`</summary>
+
+# `basename` vs `dirname`
+
+1. `basename`: command extracts the filename from a given path. It essentially returns the last component of the path.
+
+```bash
+echo $(basename "/usr/bin/basename.sh")
+# basename.sh
+```
+
+2. `dirname`: command extracts the directory portion from a given path. It essentially returns all the component of the path except the last one.
+
+```bash
+echo $(dirname "/usr/bin/basename.sh")
+# /usr/bin
+```
+
+</details>
+
+<details>
+
+<summary>`[` vs `[[`</summary>
+
+# `[` vs `[[`
+
+`[[` is bash's improvement to the `[` command. It has several enchancements. Read more [here](https://mywiki.wooledge.org/BashFAQ/031), [here](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
+
+```bash
+# no need to quote to prevent word splitting
+if [[ -f $file ]]; then
+    ...
+
+# with `[`, we need to quote variables to prevent word splitting
+if [ -f "$file" ]; then
+    ...
+
+# can use && and || operator for complex commands
+# can also use < and > operator for string comparisons
+if [[ -z $file && -f $file ]]; then
+    ...
+
+# as opposed to, `[` is a regular command and && or ||
+# or < or > cannot be passed to it
+if [ -z $file ] && [ -f $file ]; then
+    ...
+
+# has a operator for regex pattern matching
+if [[ $file =~ ^file[0-9]+$ ]]; then
+    ...
+
+# allows for pattern matching and globbing
+if [[ $input = y* ]]; then
+    ...
+```
+
+</details>
+
+<details>
+
 <summary>dollar (`$`) in bash</summary>
 
 # dollar (`$`) in bash
@@ -146,6 +244,8 @@ The `$` character is used in parameter expansion, command substitution and arith
 
 ```bash
 
+# parameter expansion example
+
 # ${parameter:-word}: If parameter is null or unset, then word is substituted, otherwise the value of parameter is substituted.
 
 param="Hello world"
@@ -176,6 +276,26 @@ echo ${param:+'default'} # notice this prints nothing as param is empty
 param="hello world"
 echo ${param:+'new default'} # notice this prints new default even though param is non empty
 # new default
+
+# ${parameter#word}: If parameter does not start with word, then nothing is substituted, otherwise the shortest match is substituted.
+param="ooooworld"
+echo ${param#*o}
+# oooworld
+
+# ${parameter##word}: If parameter does not start with word, then nothing is substituted, otherwise the longest match is substituted.
+param="ooooworld"
+echo ${param##*o}
+# rld
+
+# ${parameter%word}: If parameter does not end with word, then nothing is substituted, otherwise the shortest match is substituted.
+param="helloooo"
+echo ${param%o*}
+# hellooo
+
+# ${parameter%%word}: If parameter does not end with word, then nothing is substituted, otherwise the longest match is substituted.
+param="helloooo"
+echo ${param%%o*}
+# hell
 
 # ${parameter:?word}: If parameter is null or unset, then word is written to standard error, otherwise the value of parameter is substituted.
 param=""
