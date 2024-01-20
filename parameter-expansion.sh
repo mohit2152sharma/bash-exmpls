@@ -33,6 +33,26 @@ param="hello world"
 echo ${param:+'new default'} # notice this prints new default even though param is non empty
 # new default
 
+# ${parameter#word}: If parameter does not start with word, then nothing is substituted, otherwise the shortest match is substituted.
+param="ooooworld"
+echo ${param#*o}
+# oooworld
+
+# ${parameter##word}: If parameter does not start with word, then nothing is substituted, otherwise the longest match is substituted.
+param="ooooworld"
+echo ${param##*o}
+# rld
+
+# ${parameter%word}: If parameter does not end with word, then nothing is substituted, otherwise the shortest match is substituted.
+param="helloooo"
+echo ${param%o*}
+# hellooo
+
+# ${parameter%%word}: If parameter does not end with word, then nothing is substituted, otherwise the longest match is substituted.
+param="helloooo"
+echo ${param%%o*}
+# hell
+
 # ${parameter:?word}: If parameter is null or unset, then word is written to standard error, otherwise the value of parameter is substituted.
 param=""
 echo ${param:?'error message'} || true # notice that this throws error and prints the error message
