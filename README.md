@@ -3,6 +3,143 @@
 
 <details>
 
+<summary>parameter expansion</summary>
+
+# parameter expansion
+
+The `$` character is used in parameter expansion, command substitution and arithemtic expansion.
+
+1. parameter expansion: `${parameter}`
+2. command substitution: `$(command)`
+3. arithemtic expansion: `$((expression))`
+
+## Examples:
+
+```bash
+
+# parameter expansion example
+
+# ${parameter:-word}: If parameter is null or unset, then word is substituted, otherwise the value of parameter is substituted.
+
+param="Hello world"
+echo $param
+# Hello world
+echo ${param:-"default"}
+# Hello world
+
+param=""
+echo $param
+#
+echo ${param:-"new default"}
+# new default
+echo $param #notice param is still null
+#
+
+# ${parameter:=word}: If parameter is null or unset, then word is assigned to parameter, the value of parameter is then substituted.
+param=""
+echo ${param:='default'}
+# default
+echo $param # notice now default is assigned to param
+# default
+
+# ${parameter:+word}: If parameter is null or unset, then nothing is substituted, otherwise the expansion of word is substituted.
+param=""
+echo ${param:+'default'} # notice this prints nothing as param is empty
+#
+param="hello world"
+echo ${param:+'new default'} # notice this prints new default even though param is non empty
+# new default
+
+# ${parameter#word}: If parameter does not start with word, then nothing is substituted, otherwise the shortest match is substituted.
+param="ooooworld"
+echo ${param#*o}
+# oooworld
+
+# ${parameter##word}: If parameter does not start with word, then nothing is substituted, otherwise the longest match is substituted.
+param="ooooworld"
+echo ${param##*o}
+# rld
+
+# ${parameter%word}: If parameter does not end with word, then nothing is substituted, otherwise the shortest match is substituted.
+param="helloooo"
+echo ${param%o*}
+# hellooo
+
+# ${parameter%%word}: If parameter does not end with word, then nothing is substituted, otherwise the longest match is substituted.
+param="helloooo"
+echo ${param%%o*}
+# hell
+
+# ${parameter:?word}: If parameter is null or unset, then word is written to standard error, otherwise the value of parameter is substituted.
+param=""
+echo ${param:?'error message'} || true # notice that this throws error and prints the error message
+# ./parameter-expansion.sh: line 30: param: error message
+```
+
+</details>
+
+<details>
+
+<summary>`basename` vs `dirname`</summary>
+
+# `basename` vs `dirname`
+
+1. `basename`: command extracts the filename from a given path. It essentially returns the last component of the path.
+
+```bash
+echo $(basename "/usr/bin/basename.sh")
+# basename.sh
+```
+
+2. `dirname`: command extracts the directory portion from a given path. It essentially returns all the component of the path except the last one.
+
+```bash
+echo $(dirname "/usr/bin/basename.sh")
+# /usr/bin
+```
+
+</details>
+
+<details>
+
+<summary>parsing json using `jq`</summary>
+
+# parsing json using `jq`
+
+1. `.` is the most basic filter, the identity filter. It returns the input unchanged except it will pretty format the json.
+2. `.[]` is an array iterator, it will iterate over all the elements of the array. To access an individual element at index `i` one can do:
+
+```bash
+echo $someJson | jq '.[1]'
+```
+
+3. `.foo` is a field accessor. It returns the value of the key `foo` from the json object.
+
+```bash
+echo $someJson | jq '.foo'
+```
+
+4. One can chain filtering operation using `|` pipe operator:
+
+```bash
+echo $someJson | jq '.[] | .foo | .[] | .bar.zoo'
+```
+
+5. `jq` also has builtin functions like:
+
+```bash
+echo $someJson | jq '.[] | length' # this returns the length of each element of the array
+echo $someJson | jq '. | keys' # this returns the keys inside the json object
+echo $someJson | jq '.[] | select(.foo.bar == "baz")' # this filters the elements of the array and selects only those whose `foo.bar` is `baz`
+echo $someJson | jq 'map(select(.foo.bar == "baz"))' # same as above except map function is used to iterate through all elements of array
+```
+
+6. For more details refer [here](https://jqlang.github.io/jq/manual/)
+
+</details>
+
+<details>
+
 <summary>`case` syntax</summary>
 
 # `case` syntax
@@ -35,66 +172,6 @@ one
 
 ❯ bash case.sh four
 default
-```
-
-</details>
-
-<details>
-
-<summary>`basename` vs `dirname`</summary>
-
-# `basename` vs `dirname`
-
-1. `basename`: command extracts the filename from a given path. It essentially returns the last component of the path.
-
-```bash
-echo $(basename "/usr/bin/basename.sh")
-# basename.sh
-```
-
-2. `dirname`: command extracts the directory portion from a given path. It essentially returns all the component of the path except the last one.
-
-```bash
-echo $(dirname "/usr/bin/basename.sh")
-# /usr/bin
-```
-
-</details>
-
-<details>
-
-<summary>`[` vs `[[`</summary>
-
-# `[` vs `[[`
-
-`[[` is bash's improvement to the `[` command. It has several enchancements. Read more [here](https://mywiki.wooledge.org/BashFAQ/031), [here](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
-
-```bash
-# no need to quote to prevent word splitting
-if [[ -f $file ]]; then
-    ...
-
-# with `[`, we need to quote variables to prevent word splitting
-if [ -f "$file" ]; then
-    ...
-
-# can use && and || operator for complex commands
-# can also use < and > operator for string comparisons
-if [[ -z $file && -f $file ]]; then
-    ...
-
-# as opposed to, `[` is a regular command and && or ||
-# or < or > cannot be passed to it
-if [ -z $file ] && [ -f $file ]; then
-    ...
-
-# has a operator for regex pattern matching
-if [[ $file =~ ^file[0-9]+$ ]]; then
-    ...
-
-# allows for pattern matching and globbing
-if [[ $input = y* ]]; then
-    ...
 ```
 
 </details>
@@ -230,77 +307,38 @@ world
 
 <details>
 
-<summary>parameter expansion</summary>
+<summary>`[` vs `[[`</summary>
 
-# parameter expansion
+# `[` vs `[[`
 
-The `$` character is used in parameter expansion, command substitution and arithemtic expansion.
-
-1. parameter expansion: `${parameter}`
-2. command substitution: `$(command)`
-3. arithemtic expansion: `$((expression))`
-
-## Examples:
+`[[` is bash's improvement to the `[` command. It has several enchancements. Read more [here](https://mywiki.wooledge.org/BashFAQ/031), [here](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
 
 ```bash
+# no need to quote to prevent word splitting
+if [[ -f $file ]]; then
+    ...
 
-# parameter expansion example
+# with `[`, we need to quote variables to prevent word splitting
+if [ -f "$file" ]; then
+    ...
 
-# ${parameter:-word}: If parameter is null or unset, then word is substituted, otherwise the value of parameter is substituted.
+# can use && and || operator for complex commands
+# can also use < and > operator for string comparisons
+if [[ -z $file && -f $file ]]; then
+    ...
 
-param="Hello world"
-echo $param
-# Hello world
-echo ${param:-"default"}
-# Hello world
+# as opposed to, `[` is a regular command and && or ||
+# or < or > cannot be passed to it
+if [ -z $file ] && [ -f $file ]; then
+    ...
 
-param=""
-echo $param
-#
-echo ${param:-"new default"}
-# new default
-echo $param #notice param is still null
-#
+# has a operator for regex pattern matching
+if [[ $file =~ ^file[0-9]+$ ]]; then
+    ...
 
-# ${parameter:=word}: If parameter is null or unset, then word is assigned to parameter, the value of parameter is then substituted.
-param=""
-echo ${param:='default'}
-# default
-echo $param # notice now default is assigned to param
-# default
-
-# ${parameter:+word}: If parameter is null or unset, then nothing is substituted, otherwise the expansion of word is substituted.
-param=""
-echo ${param:+'default'} # notice this prints nothing as param is empty
-#
-param="hello world"
-echo ${param:+'new default'} # notice this prints new default even though param is non empty
-# new default
-
-# ${parameter#word}: If parameter does not start with word, then nothing is substituted, otherwise the shortest match is substituted.
-param="ooooworld"
-echo ${param#*o}
-# oooworld
-
-# ${parameter##word}: If parameter does not start with word, then nothing is substituted, otherwise the longest match is substituted.
-param="ooooworld"
-echo ${param##*o}
-# rld
-
-# ${parameter%word}: If parameter does not end with word, then nothing is substituted, otherwise the shortest match is substituted.
-param="helloooo"
-echo ${param%o*}
-# hellooo
-
-# ${parameter%%word}: If parameter does not end with word, then nothing is substituted, otherwise the longest match is substituted.
-param="helloooo"
-echo ${param%%o*}
-# hell
-
-# ${parameter:?word}: If parameter is null or unset, then word is written to standard error, otherwise the value of parameter is substituted.
-param=""
-echo ${param:?'error message'} || true # notice that this throws error and prints the error message
-# ./parameter-expansion.sh: line 30: param: error message
+# allows for pattern matching and globbing
+if [[ $input = y* ]]; then
+    ...
 ```
 
 </details>
