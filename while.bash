@@ -10,3 +10,9 @@ for i in {1..3}; do
 		fi
 	done
 done
+
+sum=0
+echo "1 2 3 4" | tr ' ' '\n' | while IFS= read -r number; do
+	echo "number is $number"
+	sum=$((sum + number))
+done
