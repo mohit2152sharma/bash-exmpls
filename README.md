@@ -214,7 +214,8 @@ done
 ```
 
 - Using `while` loop with pipe operator
-  > [!NOTE] In the statement `lhs | rhs`, the `rhs` statement runs in a separate subshell. The variables created or updated in the `rhs` statement do not propogate to the parent process.
+  > [!NOTE]
+  > In the statement `lhs | rhs`, the `rhs` statement runs in a separate subshell. The variables created or updated in the `rhs` statement do not propogate to the parent process.
 
 </details>
 
